@@ -60,8 +60,13 @@
   <audio data-key="74" src="sounds/snare.wav"></audio>
   <audio data-key="75" src="sounds/tom.wav"></audio>
   <audio data-key="76" src="sounds/tink.wav"></audio>
-
-<script>
+  
+  <script>
+  function removeTransition(e) {
+    //transform is the propertyName of the event. If it doesn't (!==) transform, don't do anything. 
+    if(e.propertyName !== 'transform') return;
+    this.classList.remove('playing');
+  }
   // Here we'll listen for a key-down event (event listener). 
   function playSound(e) {
     // The Document method querySelector() returns the first Element within the document that matches the specified selector, or group of selectors. It takes params of whatever datakey we hit. The keydown event + .keyCode
@@ -70,17 +75,13 @@
     //if there's no audio (!=bang) stop the function.
     if (!audio) return;  
     // Rewinds the start of the function.
+    key.classList.add('playing');
     audio.currentTime = 0; 
     // play() method attempts to begin playback of the media. We call it on play so it needs no params
     audio.play();
     key.classList.add('playing');
   };
-  function removeTransition(e) {
-    //transform is the propertyName of the event. If it doesn't (!==) transform, don't do anything. 
-    if(e.propertyName !== 'transform') return;
-    this.classList.remove('playing');
-  }
-  const keys = document.querySelectorAll('.key');
+  const keys = Array.from(document.querySelectorAll('.key'));
   keys.forEach(key => key.addEventListener('transitionend', removeTransition ));
   window.addEventListener('keydown', playSound);
 
